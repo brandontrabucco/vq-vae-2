@@ -53,9 +53,9 @@ if __name__ == "__main__":
         optimizer.apply_gradients(zip(tape.gradient(
             train_loss, model.trainable_variables), model.trainable_variables))
 
-        if iteration % 100 == 0:
-            tf.summary.experimental.set_step(iteration)
-            with writer.as_default():
-                tf.summary.image("original", batch["train"]["images"] + 0.5)
-                tf.summary.image("reconstruction", train_prediction + 0.5)
-                tf.summary.scalar("mse", train_loss)
+        tf.summary.experimental.set_step(iteration)
+        print("Iteration: {} MSE: {}".format(iteration, train_loss.numpy()))
+        with writer.as_default():
+            tf.summary.image("original", batch["train"]["images"] + 0.5)
+            tf.summary.image("reconstruction", train_prediction + 0.5)
+            tf.summary.scalar("mse", train_loss)
