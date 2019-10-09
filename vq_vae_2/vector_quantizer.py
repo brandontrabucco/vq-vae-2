@@ -35,14 +35,12 @@ class VectorQuantizer(tf.keras.layers.Layer):
         self.embeddings = self.add_weight(
             name='embeddings',
             shape=(input_shape[-1], self.num_embeddings),
-            initializer=tf.keras.initializers.VarianceScaling(
-                distribution='uniform'),
+            initializer=tf.keras.initializers.VarianceScaling(distribution='uniform'),
             trainable=False)
         self.ema_dw = self.add_weight(
             name='ema_dw',
             shape=(input_shape[-1], self.num_embeddings),
-            initializer=tf.keras.initializers.Constant(
-                value=self.embeddings.numpy()),
+            initializer=tf.keras.initializers.Constant(value=self.embeddings.numpy()),
             trainable=False)
         self.ema_cluster_size = self.add_weight(
             name='ema_cluster_size',
@@ -58,12 +56,10 @@ class VectorQuantizer(tf.keras.layers.Layer):
     ):
         self.ema_cluster_size.assign(
             tf.keras.backend.moving_average_update(
-                self.ema_cluster_size, tf.reduce_sum(
-                    encodings, axis=0), self.decay))
+                self.ema_cluster_size, tf.reduce_sum(encodings, axis=0), self.decay))
         self.ema_dw.assign(
             tf.keras.backend.moving_average_update(
-                self.ema_dw, tf.matmul(
-                    flat_inputs, encodings, transpose_a=True), self.decay))
+                self.ema_dw, tf.matmul(flat_inputs, encodings, transpose_a=True), self.decay))
         n = tf.reduce_sum(self.ema_cluster_size)
         self.embeddings.assign(
             self.ema_dw / tf.reshape(n * (self.ema_cluster_size + 1e-5) / (
