@@ -31,12 +31,14 @@ if __name__ == "__main__":
             "images": (tf.cast(batch["images"], tf.float32) / 255.0) - 0.5,
             "labels": tf.cast(batch["labels"], tf.int32)}
 
-    train_dataset = train_dataset.map(normalize_image, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+    train_dataset = train_dataset.map(
+        normalize_image, num_parallel_calls=tf.data.experimental.AUTOTUNE)
     train_dataset = train_dataset.shuffle(10000)
     train_dataset = train_dataset.repeat(-1)
     train_dataset = train_dataset.batch(128)
 
-    val_dataset = val_dataset.map(normalize_image, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+    val_dataset = val_dataset.map(
+        normalize_image, num_parallel_calls=tf.data.experimental.AUTOTUNE)
     val_dataset = val_dataset.shuffle(1000)
     val_dataset = val_dataset.repeat(-1)
     val_dataset = val_dataset.batch(128)
@@ -45,6 +47,7 @@ if __name__ == "__main__":
     dataset = dataset.prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
 
     for iteration, batch in enumerate(dataset):
+
         with tf.GradientTape() as tape:
             train_prediction = model(batch["train"]["images"], training=True)
             train_loss = tf.reduce_mean(tf.losses.mean_squared_error(
