@@ -18,7 +18,7 @@ def vq_vae_2(
     feature_pyramid = [inputs]
     for layer in range(num_quantizer_layers):
         x = encoder(
-            feature_pyramid[-1],
+            x,
             initial_hidden_size=hidden_size // 2 if layer == 0 else hidden_size,
             downsampling_hidden_size=hidden_size,
             residual_hidden_size=hidden_size // 4,
