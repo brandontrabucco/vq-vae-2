@@ -31,9 +31,7 @@ def vq_vae_2(
             embedding_size,
             1,
             padding='same')(x)
-        x = VectorQuantizer(
-            num_embeddings=num_embeddings,
-            decay=decay)(x)
+        x = VectorQuantizer(num_embeddings=num_embeddings, decay=decay)(x)
         x = decoder(
             x,
             initial_hidden_size=hidden_size // 2 if layer == 0 else hidden_size,
@@ -42,8 +40,7 @@ def vq_vae_2(
             num_upsampling_layers=2 if layer == 0 else 1,
             num_residual_layers=2)
         if layer > 0:
-            x = tf.keras.layers.concatenate([
-                x, feature_pyramid.pop()])
+            x = tf.keras.layers.concatenate([x, feature_pyramid.pop()])
     return tf.keras.layers.Conv2D(
         3,
         1,
