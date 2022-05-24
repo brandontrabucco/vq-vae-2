@@ -6,7 +6,7 @@ from setuptools import setup
 
 
 REQUIRED_PACKAGES = [
-    'tensorflow-gpu==2.0.1',
+    'tensorflow-gpu==2.6.4',
     'numpy',
     'matplotlib']
 
